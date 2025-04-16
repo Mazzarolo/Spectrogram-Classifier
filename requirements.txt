@@ -1,0 +1,8 @@
+pandas
+scikit-learn
+numpy
+torchmetrics
+torcheval
+matplotlib
+pytorch_lightning
+scipy

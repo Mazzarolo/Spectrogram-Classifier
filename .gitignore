@@ -1,0 +1,5 @@
+__pycache__/
+bacteria/
+lightning_logs/
+logs/
+images/

@@ -57,7 +57,7 @@ def main():
 
     end_point = conf.START_POINT + conf.N_FEATURES
 
-    with open("windows_times.csv", mode="a", newline="") as file:
+    with open("results/windows_times.csv", mode="a", newline="") as file:
         writer = csv.writer(file)
         writer.writerow([conf.N_FEATURES, 563 + conf.START_POINT, 563 + end_point, train_time, test_time])
 

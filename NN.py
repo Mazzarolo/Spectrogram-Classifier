@@ -32,12 +32,12 @@ class NN(pl.LightningModule):
             initialsL.append(StandardScaler_nn(torch.from_numpy(mean_np).float(),torch.from_numpy(scale_np).float()))
             initialsL.append(GaussianNoise(sigma = 0.01))
             out_features = get_out_features(initialsL, ((1, 1, conf.N_FEATURES)))
-            arc.append(nn.Conv1d(in_channels = 1, out_channels = 16, kernel_size = 8,padding = 0))
+            arc.append(nn.Conv1d(in_channels = 1, out_channels = 16, kernel_size = 64,padding = 0))
             arc.append(nn.ELU())
-            arc.append(nn.MaxPool1d(kernel_size=2, stride=2, padding=0, dilation=1, ceil_mode=False))
-            arc.append(nn.Conv1d(in_channels = 16,out_channels = 32, kernel_size = 8,padding = 0))
+            arc.append(nn.MaxPool1d(kernel_size=16, stride=2, padding=0, dilation=1, ceil_mode=False))
+            arc.append(nn.Conv1d(in_channels = 16,out_channels = 32, kernel_size = 64,padding = 0))
             arc.append(nn.ELU())
-            arc.append(nn.MaxPool1d(kernel_size=2, stride=2, padding=0, dilation=1, ceil_mode=False))
+            arc.append(nn.MaxPool1d(kernel_size=16, stride=2, padding=0, dilation=1, ceil_mode=False))
 
             out_features = get_out_features(arc, ((1, 1, out_features)))
 
@@ -91,7 +91,7 @@ class NN(pl.LightningModule):
         #cm = confusion_matrix(y.cpu(), z.cpu())
         disp = ConfusionMatrixDisplay(confusion_matrix=matrix.cpu().numpy(),display_labels=self.data.le.inverse_transform([0,1,2,3]))       
         disp.plot()
-        #plt.show()
+        plt.show()
         plt.savefig(f"cms/confusion_matrix_{datetime.datetime.now().strftime('%Y%m%d_%H%M%S')}.png")  # Pode mudar o nome para algo dinâmico, se necessário
         plt.close()
         print("Accuracy of the NN: ",accuracy)
@@ -122,7 +122,7 @@ class NN(pl.LightningModule):
 
         end_point = conf.START_POINT + conf.N_FEATURES
 
-        with open("windows.csv", mode="a", newline="") as file:
+        with open("results/windows.csv", mode="a", newline="") as file:
             writer = csv.writer(file)
             writer.writerow([
                 conf.N_FEATURES, 

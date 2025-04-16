@@ -1,7 +1,7 @@
 import pandas as pd
 import matplotlib.pyplot as plt
 
-df = pd.read_csv('windows.csv')
+df = pd.read_csv('results/windows.csv')
 
 sizes = [40, 80, 160]
 plt.figure(figsize=(14, 6))

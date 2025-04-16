@@ -19,7 +19,7 @@ for folder in sorted(os.listdir(base_path)):
                 last_step = df["step"].iloc[-1]
                 epoch_step_data[folder] = (last_epoch, last_step)
 
-windows_times_path = "windows_times.csv"
+windows_times_path = "results/windows_times.csv"
 
 if os.path.exists(windows_times_path):
     windows_df = pd.read_csv(windows_times_path)
@@ -32,7 +32,7 @@ if os.path.exists(windows_times_path):
             windows_df.loc[i, "last_epoch"] = epoch_step_data[version][0]
             windows_df.loc[i, "last_step"] = epoch_step_data[version][1]
 
-    output_path = "windows_times_and_epochs.csv"
+    output_path = "results/windows_times_and_epochs.csv"
 
     windows_df.to_csv(output_path, index=False)
     print(f"Arquivo salvo com sucesso em: {output_path}")

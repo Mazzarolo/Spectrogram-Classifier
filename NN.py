@@ -16,7 +16,7 @@ import datetime
 
 
 class NN(pl.LightningModule):
-    def __init__(self,data=None,arc=None,lr=1e-6) -> nn.Sequential:
+    def __init__(self,data=None,arc=None,lr=1e-6,n_classes=4) -> nn.Sequential:
         super().__init__()
         self.data = Data()
         scale_np, mean_np = self.data.get_pipelines()
@@ -47,7 +47,7 @@ class NN(pl.LightningModule):
             arc.append(nn.ELU())
             arc.append(nn.Linear(out_features//2,out_features//4))
             arc.append(nn.ELU())
-            arc.append(nn.Linear(out_features//4, 4))
+            arc.append(nn.Linear(out_features//4, n_classes))
             
             arc.append(nn.Softmax(dim=0))
             self.arc = nn.Sequential(*initialsL, *arc)

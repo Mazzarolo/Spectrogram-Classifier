@@ -92,9 +92,10 @@ def rescale_min_max(df):
 
 def process_file(filename, baseline="nan", glass="nan", fluorescence="nan", rescaley=1, mean_rows=5):
   data = pd.read_csv(filename, sep='\t', header=None)
+  if conf.N_FEATURES == 0:
+    conf.N_FEATURES = data.shape[0]
   cut_value = conf.START_POINT
   data = data.iloc[cut_value:cut_value+conf.N_FEATURES, :].reset_index(drop=True)
-  print(cut_value)
 
   x_values = data.iloc[:, 0] 
   y_values = data.iloc[:, 1:]

@@ -118,11 +118,12 @@ def rescale_min_max(df):
 
 def process_file(filename, baseline="nan", glass="nan", fluorescence="nan", rescaley=1, mean_rows=5):
   data = pd.read_csv(filename, quotechar='"',  skiprows=2)
+  if conf.N_FEATURES == 0:
+    conf.N_FEATURES = data.shape[0]
   # to get a window of dataset
   cut_value = conf.START_POINT
   data = data.iloc[cut_value:cut_value+conf.N_FEATURES, :].reset_index(drop=True)
   #print(conf.N_FEATURES)
-  print(cut_value)
   #intervals_peak = [data.iloc[:330, :], data.iloc[560:800, :]]
   # peak size 570
   #intervals_non_peak = [data.iloc[330:560, :], data.iloc[800:, :]]

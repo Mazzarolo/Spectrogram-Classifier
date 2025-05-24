@@ -57,7 +57,6 @@ class Data(LightningDataModule):
     def get_data(self) -> None:
         #git_repo = git.Repo(os.getcwd(), search_parent_directories=True)
         #git_root = git_repo.git.rev_parse("--show-toplevel")
-        print(self.mean_rows)
         self.processor = Processed_wine_data(mean_rows=self.mean_rows)
         
         X = self.processor.x_full_dataset
@@ -95,8 +94,12 @@ class Data(LightningDataModule):
     def finished_dataset(self)  -> None:
         pipeline = make_pipeline(pp_SNV(),pp_StandardScaling())
         pipeline.fit(self.xcal[:,:conf.N_FEATURES-conf.CUT_NOISE],self.ycal)
-        #self.xtest = np.concatenate([self.xtest,self.processor.x_extra_test])       # pega os dados extra
-        #self.ytest = np.concatenate([self.ytest,self.processor.y_extra_test])
+        if hasattr(self.processor, 'x_extra_test') and self.processor.x_extra_test is not None:
+            self.xtest = np.concatenate([self.xtest, self.processor.x_extra_test])
+
+        if hasattr(self.processor, 'y_extra_test') and self.processor.y_extra_test is not None:
+            self.ytest = np.concatenate([self.ytest, self.processor.y_extra_test])
+
         torch.set_printoptions(precision=10)
         self.xcal = np.expand_dims(self.xcal, axis=-1)
         

@@ -1,4 +1,4 @@
-__pycache__/
+*__pycache__/
 bacteria/
 wine/
 lightning_logs/
@@ -7,3 +7,4 @@ images/
 cms/
 results/
 *.ps1
+logger.py

@@ -1,6 +1,7 @@
 import logging
 import os
 from datetime import datetime
+import csv
 
 def setup_logging():
     log_directory = "logs"
@@ -21,3 +22,8 @@ def setup_logging():
     )
 
     return logging.getLogger(__name__)
+
+def print_times(n_features, start_point, end_point, train_time, test_time):
+    with open("results/windows_times.csv", mode="a", newline="") as file:
+        writer = csv.writer(file)
+        writer.writerow([n_features, start_point, end_point, train_time, test_time])

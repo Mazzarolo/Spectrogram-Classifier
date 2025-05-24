@@ -1,9 +1,7 @@
 import traceback
 from pytorch_lightning.utilities.types import EVAL_DATALOADERS
-# import unidecode
 import numpy as np
 import pandas as pd
-# import git
 import os
 import torch
 
@@ -12,8 +10,7 @@ from sklearn.model_selection import train_test_split
 from sklearn.pipeline import make_pipeline
 from pytorch_lightning import LightningDataModule
 from copy import deepcopy
-from process import Processed_data
-from process_wine import Processed_wine_data
+from process_bacteria import ProcessBacteriaData
 from utils import SNV, StandardScaler_nn, pp_SNV, pp_StandardScaling
 from sklearn import preprocessing
 import conf
@@ -23,27 +20,30 @@ class Data(LightningDataModule):
     _instance = None
 
     def __new__(cls, *args, **kwargs):
-        # Define apenas uma instância independente de quantas vezes o construtor ser chamado
         if cls._instance is None:
             cls._instance = super().__new__(cls)
         return cls._instance
-
 
     def __init__(self, 
                  batch_size = 256, 
                  v_batch_size = 128,
                  use_augmentation = False,
-                 mean_rows = 5):
+                 processor_class = ProcessBacteriaData,
+                 perc_val = 0.15,
+                 perc_test = 0.05,
+                 **kwargs):
         super().__init__()
         self.batch_size = batch_size
         self.v_batch_size = v_batch_size
         self.use_augmentation = use_augmentation
-        self.mean_rows = mean_rows
+        self.processor_class = processor_class
+        self.perc_val = perc_val
+        self.perc_test = perc_test
+        self.extra_args = kwargs
         self.setup()
         
     def setup(self, stage: str = None):
         if stage == None:
-            # Checa se ele ja executou o setup em algum momento
             if not hasattr(self, "mean_np"):
                 self.get_data()
                 self.split()
@@ -53,43 +53,27 @@ class Data(LightningDataModule):
 
                 self.finished_dataset()
                 
-                
     def get_data(self) -> None:
-        #git_repo = git.Repo(os.getcwd(), search_parent_directories=True)
-        #git_root = git_repo.git.rev_parse("--show-toplevel")
-        self.processor = Processed_wine_data(mean_rows=self.mean_rows)
+        self.processor = self.processor_class(**self.extra_args)
         
         X = self.processor.x_full_dataset
         Y = self.processor.y_full_dataset
+
+        self.n_classes = len(np.unique(Y))
     
         self.X_clean = X
         self.Y_clean = Y
             
-
-
     def split(self) -> None:
-        self.xcal, self.xval, self.ycal, self.yval = train_test_split(self.X_clean,self.Y_clean,test_size=0.2,random_state=24)
-        self.xval, self.xtest, self.yval, self.ytest = train_test_split(self.xval,self.yval,test_size=0.25,random_state=24)
+        perc_val_test = self.perc_val + self.perc_test
+        self.xcal, self.xval, self.ycal, self.yval = train_test_split(self.X_clean,self.Y_clean,test_size=perc_val_test,random_state=24)
+        self.xval, self.xtest, self.yval, self.ytest = train_test_split(self.xval,self.yval,test_size=self.perc_test/perc_val_test,random_state=24)
        
-
     def augmentation_process(self) -> None:
         augmented_len = int(len(self.xcal) * 0.25)
-        # Seleciona um subset dos dados
-        #shift = np.std(self.xcal)*0.25
-        #X_new = deepcopy(self.xcal[0:augmented_len,:])
-        #Y_new = deepcopy(self.ycal[0:augmented_len,:])
-        #X_new = ChemUtils.dataaugment(X_new,betashift = shift, slopeshift = shift*0.2, multishift = shift)
-        #self.X_aug = np.vstack([self.xcal, X_new])
-        #self.Y_aug = np.vstack([self.ycal, Y_new])
         
         self.xcal = self.xcal
         self.ycal = self.ycal
-        
-
-        #self.X_aug = np.repeat(self.xcal, repeats=20, axis=0)
-        #self.X_aug = ChemUtils.dataaugment(self.X_aug,betashift = shift, slopeshift = shift*0.6, multishift = shift)
-
-        #self.Y_aug = np.repeat(self.ycal, repeats=20, axis=0) #y_train is simply repeated
         
     def finished_dataset(self)  -> None:
         pipeline = make_pipeline(pp_SNV(),pp_StandardScaling())
@@ -102,8 +86,7 @@ class Data(LightningDataModule):
 
         torch.set_printoptions(precision=10)
         self.xcal = np.expand_dims(self.xcal, axis=-1)
-        
-        
+              
         self.xval = np.expand_dims(self.xval, axis=-1)
         self.xtest = np.expand_dims(self.xtest, axis=-1)
 
@@ -123,7 +106,6 @@ class Data(LightningDataModule):
         self.train_dataset = TensorDataset(self.X_train,self.Y_train)
         self.val_dataset = TensorDataset(self.X_val,self.Y_val)
         self.test_dataset = TensorDataset(self.X_test,self.Y_test)
-
 
         self.scale_np = np.expand_dims(np.expand_dims(pipeline[1].scale_,-1),-1).T
         self.mean_np = np.expand_dims(np.expand_dims(pipeline[1].mean_,-1),-1).T

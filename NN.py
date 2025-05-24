@@ -23,6 +23,7 @@ class NN(pl.LightningModule):
         self.lr=lr
         self.arc=arc
         self.best_model = (-1,None,None,None)
+        self.n_classes=n_classes
         
         if self.arc==None:
             arc = nn.ModuleList()
@@ -86,12 +87,12 @@ class NN(pl.LightningModule):
         #mean_error = self.metric(z,y,squared=False,num_outputs=conf.FINAL_OUTPUT)
         accuracy = self.metric(z,y)
         self.accuracy_to_print = accuracy
-        matrix = multiclass_confusion_matrix(z,y,4)
+        matrix = multiclass_confusion_matrix(z,y,self.n_classes)
         print(matrix)       
         #cm = confusion_matrix(y.cpu(), z.cpu())
         disp = ConfusionMatrixDisplay(confusion_matrix=matrix.cpu().numpy(),display_labels=self.data.le.inverse_transform([0,1,2,3]))       
         disp.plot()
-        plt.show()
+        #plt.show()
         plt.savefig(f"cms/confusion_matrix_{datetime.datetime.now().strftime('%Y%m%d_%H%M%S')}.png")  # Pode mudar o nome para algo dinâmico, se necessário
         plt.close()
         print("Accuracy of the NN: ",accuracy)
@@ -144,7 +145,7 @@ class NN(pl.LightningModule):
         recall = report["macro avg"]["recall"]
         f1_score = report["macro avg"]["f1-score"]
 
-        with open("metrics_results.csv", mode="a", newline="") as file:
+        with open("results/metrics_results.csv", mode="a", newline="") as file:
             writer = csv.writer(file)
             writer.writerow([
                 accuracy,
@@ -168,7 +169,7 @@ class NN(pl.LightningModule):
         z = z
         #print(z)
         device = 'cuda' if torch.cuda.is_available() else 'cpu'
-        self.metric = MulticlassAccuracy(num_classes=4).to(device=device)
+        self.metric = MulticlassAccuracy(num_classes=self.n_classes).to(device=device)
         val_loss = self.metric(z, y)
         
                 

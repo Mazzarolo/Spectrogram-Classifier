@@ -13,6 +13,7 @@ from sklearn.pipeline import make_pipeline
 from pytorch_lightning import LightningDataModule
 from copy import deepcopy
 from process import Processed_data
+from process_wine import Processed_wine_data
 from utils import SNV, StandardScaler_nn, pp_SNV, pp_StandardScaling
 from sklearn import preprocessing
 import conf
@@ -57,7 +58,7 @@ class Data(LightningDataModule):
         #git_repo = git.Repo(os.getcwd(), search_parent_directories=True)
         #git_root = git_repo.git.rev_parse("--show-toplevel")
         print(self.mean_rows)
-        self.processor = Processed_data(mean_rows=self.mean_rows)
+        self.processor = Processed_wine_data(mean_rows=self.mean_rows)
         
         X = self.processor.x_full_dataset
         Y = self.processor.y_full_dataset
@@ -94,8 +95,8 @@ class Data(LightningDataModule):
     def finished_dataset(self)  -> None:
         pipeline = make_pipeline(pp_SNV(),pp_StandardScaling())
         pipeline.fit(self.xcal[:,:conf.N_FEATURES-conf.CUT_NOISE],self.ycal)
-        self.xtest = np.concatenate([self.xtest,self.processor.x_extra_test])       # pega os dados extra
-        self.ytest = np.concatenate([self.ytest,self.processor.y_extra_test])
+        #self.xtest = np.concatenate([self.xtest,self.processor.x_extra_test])       # pega os dados extra
+        #self.ytest = np.concatenate([self.ytest,self.processor.y_extra_test])
         torch.set_printoptions(precision=10)
         self.xcal = np.expand_dims(self.xcal, axis=-1)
         

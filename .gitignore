@@ -1,5 +1,8 @@
 __pycache__/
 bacteria/
+wine/
 lightning_logs/
 logs/
 images/
+cms/
+results/

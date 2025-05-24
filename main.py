@@ -25,7 +25,7 @@ def main():
     conf.N_FEATURES = args.n_features
     conf.START_POINT = args.start_point
 
-    data = Data(mean_rows=mean, processor_class=ProcessBacteriaData, perc_val=0.15, perc_test=0.05) 
+    data = Data(ProcessWineData, mean_rows=mean, perc_val=0.1, perc_test=0.1) 
     
     model = NN(data=data,lr=1e-6)
     

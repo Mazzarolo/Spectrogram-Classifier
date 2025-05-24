@@ -25,10 +25,10 @@ class Data(LightningDataModule):
         return cls._instance
 
     def __init__(self, 
+                 processor_class,
                  batch_size = 256, 
                  v_batch_size = 128,
                  use_augmentation = False,
-                 processor_class = ProcessBacteriaData,
                  perc_val = 0.15,
                  perc_test = 0.05,
                  **kwargs):

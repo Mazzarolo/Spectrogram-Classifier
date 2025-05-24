@@ -6,3 +6,4 @@ logs/
 images/
 cms/
 results/
+*.ps1

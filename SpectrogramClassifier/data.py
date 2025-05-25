@@ -1,13 +1,12 @@
 import numpy as np
 import torch
-
+import SpectrogramClassifier.conf as conf
 from torch.utils.data import TensorDataset, DataLoader
 from sklearn.model_selection import train_test_split
 from sklearn.pipeline import make_pipeline
 from pytorch_lightning import LightningDataModule
-from utils import SNV, StandardScaler_nn, pp_SNV, pp_StandardScaling
+from SpectrogramClassifier.utils import SNV, StandardScaler_nn, pp_SNV, pp_StandardScaling
 from sklearn import preprocessing
-import conf
 
 class Data(LightningDataModule):
     

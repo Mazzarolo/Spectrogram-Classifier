@@ -1,10 +1,10 @@
 from pytorch_lightning import Trainer
 from pytorch_lightning import seed_everything
 from pytorch_lightning.callbacks import EarlyStopping
-from data import Data
-from process_wine import ProcessWineData
-from process_bacteria import ProcessBacteriaData
-from NN import NN
+from SpectrogramClassifier.data import Data
+from SpectrogramClassifier.PreProcess.process_wine import ProcessWineData
+from SpectrogramClassifier.PreProcess.process_bacteria import ProcessBacteriaData
+from SpectrogramClassifier.NN import NN
 import argparse
 
 def main():

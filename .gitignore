@@ -6,5 +6,6 @@ logs/
 images/
 cms/
 results/
+plots/
 *.ps1
 logger.py

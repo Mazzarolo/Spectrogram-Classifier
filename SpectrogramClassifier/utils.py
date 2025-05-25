@@ -6,7 +6,7 @@ from typing import Callable, Dict, List, Optional, Tuple, TypeVar, Union
 import pandas as pd
 import sklearn.base as skbase
 from sklearn.preprocessing import StandardScaler
-import conf
+import SpectrogramClassifier.conf as conf
 
 class SNV(nn.Module):
     def __init__(self):

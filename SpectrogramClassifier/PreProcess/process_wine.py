@@ -1,6 +1,6 @@
 import numpy as np
 import pandas as pd
-from process_sers import ProcessSersData
+from SpectrogramClassifier.PreProcess.process_sers import ProcessSersData
 
 class ProcessWineData(ProcessSersData):  
   def __init__(self, mean_rows=5):

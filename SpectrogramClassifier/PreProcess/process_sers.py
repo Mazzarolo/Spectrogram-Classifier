@@ -1,9 +1,9 @@
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
-import conf
+import SpectrogramClassifier.conf as conf
 from scipy.signal import find_peaks
-from process_abstract import AbstractProcessData
+from SpectrogramClassifier.PreProcess.process_abstract import AbstractProcessData
 
 class ProcessSersData(AbstractProcessData):
   @staticmethod

@@ -1,17 +1,17 @@
 import pytorch_lightning as pl
 import torch
 from torch import nn
-from utils import CutEnds, StandardScaler_nn, SNV, GaussianNoise, get_out_features
+from SpectrogramClassifier.utils import CutEnds, StandardScaler_nn, SNV, GaussianNoise, get_out_features
 from torchmetrics.classification import MulticlassAccuracy
 from torch.optim import Adam
 from torcheval.metrics.functional import multiclass_confusion_matrix
 from sklearn.metrics import classification_report, confusion_matrix, ConfusionMatrixDisplay
 from matplotlib import pyplot as plt
-import conf
+import SpectrogramClassifier.conf as conf
 import csv
 
 from copy import deepcopy
-from data import Data
+from SpectrogramClassifier.data import Data
 import datetime
 
 class NN(pl.LightningModule):

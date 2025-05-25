@@ -1,16 +1,10 @@
-import traceback
-from pytorch_lightning.utilities.types import EVAL_DATALOADERS
 import numpy as np
-import pandas as pd
-import os
 import torch
 
 from torch.utils.data import TensorDataset, DataLoader
 from sklearn.model_selection import train_test_split
 from sklearn.pipeline import make_pipeline
 from pytorch_lightning import LightningDataModule
-from copy import deepcopy
-from process_bacteria import ProcessBacteriaData
 from utils import SNV, StandardScaler_nn, pp_SNV, pp_StandardScaling
 from sklearn import preprocessing
 import conf
@@ -60,6 +54,8 @@ class Data(LightningDataModule):
         Y = self.processor.y_full_dataset
 
         self.n_classes = len(np.unique(Y))
+        if conf.N_FEATURES == 0:
+            conf.N_FEATURES = X.shape[1]
     
         self.X_clean = X
         self.Y_clean = Y

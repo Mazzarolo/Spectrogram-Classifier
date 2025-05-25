@@ -1,18 +1,11 @@
-import torch
 from pytorch_lightning import Trainer
 from pytorch_lightning import seed_everything
 from pytorch_lightning.callbacks import EarlyStopping
 from data import Data
-import pickle
-import time
-import sys
-from logger import setup_logging, print_times
 from process_wine import ProcessWineData
 from process_bacteria import ProcessBacteriaData
 from NN import NN
-import conf
 import argparse
-import csv
 
 def main():
     parser = argparse.ArgumentParser()

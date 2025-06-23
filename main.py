@@ -9,7 +9,7 @@ def main():
     parser.add_argument("--mean", type=int, default=5)
     args = parser.parse_args()
     
-    data = Data(ProcessWineData, mean_rows=args.mean, perc_val=0.1, perc_test=0.1) 
+    data = Data(ProcessWineData, mean_rows=args.mean, perc_val=0.1, perc_test=0.1, folder='WineAgSmall') 
     
     model = ClassifierModel(data)
     model.fit()

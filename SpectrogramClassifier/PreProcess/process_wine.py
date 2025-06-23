@@ -3,13 +3,13 @@ import pandas as pd
 from SpectrogramClassifier.PreProcess.process_sers import ProcessSersData
 
 class ProcessWineData(ProcessSersData):  
-  def __init__(self, mean_rows=5):
-    x_w1, y_w1 = ProcessWineData.process_file(r'wine/Clean_W1.csv', mean_rows=mean_rows)
-    x_w2, y_w2 = ProcessWineData.process_file(r'wine/Clean_W2.csv', mean_rows=mean_rows)
-    x_w3, y_w3 = ProcessWineData.process_file(r'wine/Clean_W3.csv', mean_rows=mean_rows)
-    x_w4, y_w4 = ProcessWineData.process_file(r'wine/Clean_W4.csv', mean_rows=mean_rows)
-    x_w5, y_w5 = ProcessWineData.process_file(r'wine/Clean_W5.csv', mean_rows=mean_rows)
-    x_w6, y_w6 = ProcessWineData.process_file(r'wine/Clean_W6.csv', mean_rows=mean_rows)
+  def __init__(self, mean_rows=5, folder=''):
+    x_w1, y_w1 = ProcessWineData.process_file(f'{folder}/Clean_W1.csv', mean_rows=mean_rows)
+    x_w2, y_w2 = ProcessWineData.process_file(f'{folder}/Clean_W2.csv', mean_rows=mean_rows)
+    x_w3, y_w3 = ProcessWineData.process_file(f'{folder}/Clean_W3.csv', mean_rows=mean_rows)
+    x_w4, y_w4 = ProcessWineData.process_file(f'{folder}/Clean_W4.csv', mean_rows=mean_rows)
+    x_w5, y_w5 = ProcessWineData.process_file(f'{folder}/Clean_W5.csv', mean_rows=mean_rows)
+    x_w6, y_w6 = ProcessWineData.process_file(f'{folder}/Clean_W6.csv', mean_rows=mean_rows)
     
     true_y_w1 = ['w1']*y_w1.T.values.shape[0]
     true_y_w2 = ['w2']*y_w2.T.values.shape[0]
